@@ -71,7 +71,7 @@
     .brand-mark { width: 35px; height: 35px; display: grid; place-items: center; color: #fff; background: #1d1d1f; border-radius: 11px; font-size: 13.5px; font-weight: 800; letter-spacing: -.075em; line-height: 1; }
     .brand-name { font-size: 14px; font-weight: 650; letter-spacing: -.035em; }
     .header-links { display: flex; align-items: center; gap: 29px; }
-    .header-links a { font-size: 12px; color: var(--muted); transition: color .18s; padding:10px 0; }
+    .header-links a { font-size: 12px; color: var(--muted); transition: color .18s; padding:10px 0; white-space: nowrap; }
     .header-links a:hover { color: var(--ink); }
     .theme-button { margin-left: 3px; width: 32px; height: 32px; display: grid; place-items: center; color: var(--ink); border: 0; border-radius: 50%; background: transparent; cursor: pointer; transition: background-color .15s; }
     .theme-button:hover { background: var(--surface); }
@@ -142,7 +142,7 @@
     .card-bottom span:first-child { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
     .card-bottom svg { flex: 0 0 auto; width: 16px; height: 16px; transition: transform .2s; }
     .site-card:hover .card-bottom svg { transform: translate(2px,-2px); }
-    .apps-section { margin-top: 49px; }
+    .apps-section, .ask-section { margin-top: 49px; }
     .app-panel { display: flex; align-items: center; justify-content: space-between; gap: 28px; min-height: 139px; padding: 25px 29px; border-radius: 24px; background: var(--surface); color: var(--ink); transition: background-color .22s ease,box-shadow .22s ease; }
     .app-panel:hover { background:var(--surface-hover); box-shadow:0 10px 30px rgba(0,0,0,.035); }
     .app-info { display: flex; align-items: center; gap: 23px; min-width: 0; }
@@ -154,6 +154,8 @@
     .app-button { flex: 0 0 auto; display: inline-flex; align-items: center; justify-content:center; gap: 8px; min-height:44px; padding: 12px 20px; background: var(--blue); color: #fff; border-radius: 999px; font-size: 13px; font-weight: 650; transition: transform .2s,background-color .2s; }
     .app-button:hover { background: var(--blue-hover); transform: translateY(-2px); }
     .app-button svg { width: 15px; height: 15px; }
+    .ask-frame { display: block; width: 100%; height: clamp(480px, 72vh, 720px); border: 1px solid var(--line); border-radius: 24px; background: var(--surface); }
+    .ask-status { margin: 0; padding: 20px 24px; border-radius: 24px; background: var(--surface); color: var(--muted); font-size: 14px; }
     .footer { margin-top: 49px; padding: 22px 0 35px; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--subtle); font-size: 11px; letter-spacing: .01em; }
     .footer strong { color: var(--muted); font-weight: 600; }
     @media(max-width: 900px) {
@@ -177,9 +179,10 @@
       .container { width: calc(100% - 38px); }
       .hero { display:block; }
       .hero-visual { display:none; }
-      .header-inner { height: 58px; }
+      .header-inner { height: 58px; gap: 10px; }
       .brand-mark { width: 34px; height: 34px; }
-      .header-links { gap: 14px; }
+      .brand-name { font-size: 12px; }
+      .header-links { gap: 10px; }
       .header-links a { font-size: 11px; }
       .hero { padding: 42px 0 41px; }
       .hero h1 { margin: 21px 0 17px; font-size: clamp(37px,9vw,53px); }
@@ -193,7 +196,7 @@
       .site-card p { margin-bottom: 14px; max-width: none; }
       .card-icon { width: 39px; height: 39px; border-radius: 13px; }
       .card-icon svg { width: 20px; height: 20px; }
-      .apps-section { margin-top: 38px; }
+      .apps-section, .ask-section { margin-top: 38px; }
       .app-panel { align-items: stretch; flex-direction: column; gap: 17px; padding: 22px; }
       .app-icon { width: 45px; height: 45px; flex-basis: 45px; border-radius: 14px; }
       .app-icon svg { width: 23px; height: 23px; }
@@ -204,10 +207,9 @@
     }
     @media(max-width:360px) {
       .container { width:calc(100% - 30px); }
-      .header-links { gap:10px; }
+      .header-links { gap:6px; }
       .header-links a { font-size:10px; }
       .brand { gap:8px; }
-      .brand-name { font-size:12px; }
       .hero-actions { gap:14px; }
     }
     @media(hover:none) {
@@ -230,6 +232,7 @@
       <nav class="header-links" aria-label="页面导航">
         <a href="#sites">内容站点</a>
         <a href="#apps">应用系统</a>
+        <a href="#ask" aria-label="知识库问答">问答</a>
         <button class="theme-button" id="themeToggle" type="button" aria-label="切换深色模式" title="切换明暗模式">
           <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.4A8.5 8.5 0 0 1 9.6 3.5 8.5 8.5 0 1 0 20.5 14.4Z"/></svg>
           <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
@@ -312,6 +315,18 @@
         <a class="app-button" href="http://132.232.242.223:8090/login" target="_blank" rel="noopener noreferrer" aria-label="进入应用系统登录页面（新标签页，HTTP）">进入应用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19 19 5M8 5h11v11"/></svg></a>
       </div>
     </section>
+
+    <section class="section ask-section" id="ask" aria-labelledby="ask-title" data-share-url="https://cloud.ragflow.io/chats/share?shared_id=e0ca735cdce111f1be02c511cfb3bf9c&amp;from=chat&amp;auth=L2QRKJKMus7PKWbMTBgbH7pZ9FGE6D1v&amp;theme=light">
+      <div class="section-top">
+        <div><span class="section-overline">03 / ASK</span><h2 id="ask-title">知识库问答</h2></div>
+        <p class="section-note">基于公开资料回答问题。</p>
+      </div>
+      <p class="ask-status" id="ask-status">知识库问答暂未开放。</p>
+      <div id="ask-chat" hidden>
+        <iframe class="ask-frame" id="ask-frame" title="RAGFlow 知识库问答" loading="lazy"></iframe>
+        <a class="text-link" id="ask-link" target="_blank" rel="noopener noreferrer">在新标签页打开问答 <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
   </main>
 
   <footer class="container footer"><span>© <span id="year">2026</span> <strong>Deng Cong</strong>. All rights reserved.</span><span>Keep learning. Keep building.</span></footer>
@@ -327,6 +342,14 @@
       });
       document.getElementById('year').textContent = new Date().getFullYear();
       updateLabel();
+
+      const shareUrl = document.getElementById('ask').dataset.shareUrl;
+      if (shareUrl.startsWith('https://')) {
+        document.getElementById('ask-frame').src = shareUrl;
+        document.getElementById('ask-link').href = shareUrl;
+        document.getElementById('ask-status').hidden = true;
+        document.getElementById('ask-chat').hidden = false;
+      }
     })();
   </script>
 </body>
