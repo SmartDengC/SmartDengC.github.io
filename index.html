@@ -11,6 +11,7 @@
   <meta property="og:url" content="https://dengcong.com/" />
   <link rel="canonical" href="https://dengcong.com/" />
   <title>Deng Cong — Personal Space</title>
+  <script type="module" src="https://84b2abbb-946c-4465-b906-5a86ea78e65f.search.ai.cloudflare.com/assets/v0.0.43/search-snippet.es.js"></script>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2264%22%20height%3D%2264%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2217%22%20fill%3D%22%231d1d1f%22%2F%3E%3Ctext%20x%3D%2232%22%20y%3D%2240%22%20fill%3D%22%23ffffff%22%20font-size%3D%2225%22%20font-weight%3D%22800%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%2C%20sans-serif%22%20letter-spacing%3D%22-1.5%22%3EDC%3C%2Ftext%3E%3C%2Fsvg%3E" />
   <script>
     try {
@@ -71,7 +72,7 @@
     .brand-mark { width: 35px; height: 35px; display: grid; place-items: center; color: #fff; background: #1d1d1f; border-radius: 11px; font-size: 13.5px; font-weight: 800; letter-spacing: -.075em; line-height: 1; }
     .brand-name { font-size: 14px; font-weight: 650; letter-spacing: -.035em; }
     .header-links { display: flex; align-items: center; gap: 29px; }
-    .header-links a { font-size: 12px; color: var(--muted); transition: color .18s; padding:10px 0; }
+    .header-links a { font-size: 12px; color: var(--muted); transition: color .18s; padding:10px 0; white-space: nowrap; }
     .header-links a:hover { color: var(--ink); }
     .theme-button { margin-left: 3px; width: 32px; height: 32px; display: grid; place-items: center; color: var(--ink); border: 0; border-radius: 50%; background: transparent; cursor: pointer; transition: background-color .15s; }
     .theme-button:hover { background: var(--surface); }
@@ -154,6 +155,12 @@
     .app-button { flex: 0 0 auto; display: inline-flex; align-items: center; justify-content:center; gap: 8px; min-height:44px; padding: 12px 20px; background: var(--blue); color: #fff; border-radius: 999px; font-size: 13px; font-weight: 650; transition: transform .2s,background-color .2s; }
     .app-button:hover { background: var(--blue-hover); transform: translateY(-2px); }
     .app-button svg { width: 15px; height: 15px; }
+    chat-bubble-snippet {
+      --chat-bubble-position: fixed;
+      --chat-bubble-button-z-index: 30;
+      --chat-bubble-button-bottom: calc(20px + env(safe-area-inset-bottom));
+      --chat-bubble-button-right: calc(20px + env(safe-area-inset-right));
+    }
     .footer { margin-top: 49px; padding: 22px 0 35px; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--subtle); font-size: 11px; letter-spacing: .01em; }
     .footer strong { color: var(--muted); font-weight: 600; }
     @media(max-width: 900px) {
@@ -177,9 +184,10 @@
       .container { width: calc(100% - 38px); }
       .hero { display:block; }
       .hero-visual { display:none; }
-      .header-inner { height: 58px; }
+      .header-inner { height: 58px; gap: 10px; }
       .brand-mark { width: 34px; height: 34px; }
-      .header-links { gap: 14px; }
+      .brand-name { font-size: 12px; }
+      .header-links { gap: 10px; }
       .header-links a { font-size: 11px; }
       .hero { padding: 42px 0 41px; }
       .hero h1 { margin: 21px 0 17px; font-size: clamp(37px,9vw,53px); }
@@ -204,10 +212,9 @@
     }
     @media(max-width:360px) {
       .container { width:calc(100% - 30px); }
-      .header-links { gap:10px; }
+      .header-links { gap:6px; }
       .header-links a { font-size:10px; }
       .brand { gap:8px; }
-      .brand-name { font-size:12px; }
       .hero-actions { gap:14px; }
     }
     @media(hover:none) {
@@ -230,6 +237,7 @@
       <nav class="header-links" aria-label="页面导航">
         <a href="#sites">内容站点</a>
         <a href="#apps">应用系统</a>
+        <a id="chatLink" href="./chat.html">问答</a>
         <button class="theme-button" id="themeToggle" type="button" aria-label="切换深色模式" title="切换明暗模式">
           <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.4A8.5 8.5 0 0 1 9.6 3.5 8.5 8.5 0 1 0 20.5 14.4Z"/></svg>
           <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
@@ -312,21 +320,37 @@
         <a class="app-button" href="http://132.232.242.223:8090/login" target="_blank" rel="noopener noreferrer" aria-label="进入应用系统登录页面（新标签页，HTTP）">进入应用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19 19 5M8 5h11v11"/></svg></a>
       </div>
     </section>
+
   </main>
 
   <footer class="container footer"><span>© <span id="year">2026</span> <strong>Deng Cong</strong>. All rights reserved.</span><span>Keep learning. Keep building.</span></footer>
+  <chat-bubble-snippet
+    api-url="https://84b2abbb-946c-4465-b906-5a86ea78e65f.search.ai.cloudflare.com/"
+    placeholder="输入你的问题…"
+    translations='{"chatTitle":"知识库问答","chatPlaceholder":"输入你的问题…","chatInputAriaLabel":"输入问题","sendButtonLabel":"发送","sendButtonAriaLabel":"发送消息","chatEmptyTitle":"有什么想了解的？","chatEmptyDescription":"根据知识库内容回答你的问题。","openChatAriaLabel":"打开知识库问答","closeAriaLabel":"关闭问答","minimizeAriaLabel":"收起问答","clearHistoryAriaLabel":"清空对话","loadingAriaLabel":"正在加载","errorPrefix":"请求失败","unknownError":"暂时无法回答，请稍后重试。","userAvatar":"我","assistantAvatar":"AI","loadingMessages":["正在检索知识库…","正在整理回答…"]}'>
+  </chat-bubble-snippet>
   <script>
     (() => {
       const root = document.documentElement;
       const button = document.getElementById('themeToggle');
-      const updateLabel = () => button.setAttribute('aria-label', root.dataset.theme === 'dark' ? '切换浅色模式' : '切换深色模式');
+      const chatLink = document.getElementById('chatLink');
+      const chat = document.querySelector('chat-bubble-snippet');
+      const updateThemeControls = () => {
+        const theme = root.dataset.theme;
+        button.setAttribute('aria-label', theme === 'dark' ? '切换浅色模式' : '切换深色模式');
+        chatLink.href = `./chat.html?theme=${theme}`;
+        chat.setAttribute('theme', theme);
+      };
       button.addEventListener('click', () => {
         root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
         try { localStorage.setItem('dc-theme', root.dataset.theme); } catch (_) {}
-        updateLabel();
+        updateThemeControls();
       });
       document.getElementById('year').textContent = new Date().getFullYear();
-      updateLabel();
+      updateThemeControls();
+      customElements.whenDefined('chat-bubble-snippet').then(() => {
+        chat.translations = JSON.parse(chat.getAttribute('translations'));
+      });
     })();
   </script>
 </body>

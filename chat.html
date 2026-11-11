@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>知识库问答 — Deng Cong</title>
+  <script type="module" src="https://84b2abbb-946c-4465-b906-5a86ea78e65f.search.ai.cloudflare.com/assets/v0.0.43/search-snippet.es.js"></script>
+  <script>
+    (() => {
+      const isTheme = value => value === 'dark' || value === 'light';
+      let theme = new URLSearchParams(location.search).get('theme');
+      if (!isTheme(theme)) {
+        try { theme = localStorage.getItem('dc-theme'); } catch (_) {}
+      }
+      document.documentElement.dataset.theme = isTheme(theme)
+        ? theme
+        : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    })();
+  </script>
+  <style>
+    :root { --bg: #fff; --ink: #1d1d1f; --line: #e8e8ed; --blue: #0066cc; color-scheme: light; }
+    :root[data-theme="dark"] { --bg: #08080a; --ink: #f5f5f7; --line: #2c2c30; --blue: #2997ff; color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      height: 100vh;
+      height: 100dvh;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0 16px;
+      min-height: 60px;
+      padding: 8px clamp(16px, 4vw, 40px);
+      border-bottom: 1px solid var(--line);
+    }
+    h1 { margin: 0; font-size: 18px; font-weight: 650; }
+    a { display: inline-flex; align-items: center; min-height: 44px; color: var(--blue); font-size: 14px; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    a:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
+    main { min-height: 0; }
+    chat-page-snippet { display: block; height: 100%; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>知识库问答</h1>
+    <a href="./index.html">返回首页</a>
+  </header>
+  <main>
+    <chat-page-snippet
+      api-url="https://84b2abbb-946c-4465-b906-5a86ea78e65f.search.ai.cloudflare.com/"
+      placeholder="输入你的问题…"
+      translations='{"chatTitle":"知识库问答","chatPlaceholder":"输入你的问题…","chatInputAriaLabel":"输入问题","sendButtonLabel":"发送","sendButtonAriaLabel":"发送消息","chatEmptyTitle":"有什么想了解的？","chatEmptyDescription":"根据知识库内容回答你的问题。","loadingAriaLabel":"正在加载","errorPrefix":"请求失败","unknownError":"暂时无法回答，请稍后重试。","userAvatar":"我","assistantAvatar":"AI","historyTitle":"历史对话","newChatButton":"新建对话","clearChatButton":"清空对话","toggleSidebarTitle":"切换历史对话","deleteChatTitle":"删除对话","noChatsYet":"暂无对话","yesterday":"昨天","justNow":"刚刚","minuteAgo":"{n} 分钟前","minutesAgo":"{n} 分钟前","hourAgo":"{n} 小时前","hoursAgo":"{n} 小时前","loadingMessages":["正在检索知识库…","正在整理回答…"]}'>
+    </chat-page-snippet>
+  </main>
+  <script>
+    (() => {
+      const chat = document.querySelector('chat-page-snippet');
+      chat.setAttribute('theme', document.documentElement.dataset.theme);
+      customElements.whenDefined('chat-page-snippet').then(() => {
+        chat.translations = JSON.parse(chat.getAttribute('translations'));
+      });
+    })();
+  </script>
+</body>
+</html>
