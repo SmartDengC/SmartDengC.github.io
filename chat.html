@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>知识库问答 — Deng Cong</title>
   <script type="module" src="https://84b2abbb-946c-4465-b906-5a86ea78e65f.search.ai.cloudflare.com/assets/v0.0.43/search-snippet.es.js"></script>
   <script>
@@ -45,8 +45,18 @@
     a { display: inline-flex; align-items: center; min-height: 44px; color: var(--blue); font-size: 14px; text-decoration: none; }
     a:hover { text-decoration: underline; }
     a:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
-    main { min-height: 0; }
+    main { min-width: 0; min-height: 0; }
     chat-page-snippet { display: block; height: 100%; }
+    @media (max-width: 640px) {
+      body {
+        height: var(--chat-viewport-height, 100dvh);
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+      header {
+        padding-top: calc(8px + env(safe-area-inset-top));
+        padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right));
+      }
+    }
   </style>
 </head>
 <body>
@@ -64,9 +74,84 @@
   <script>
     (() => {
       const chat = document.querySelector('chat-page-snippet');
+      const main = chat.parentElement;
+      chat.remove();
       chat.setAttribute('theme', document.documentElement.dataset.theme);
       customElements.whenDefined('chat-page-snippet').then(() => {
+        customElements.upgrade(chat);
         chat.translations = JSON.parse(chat.getAttribute('translations'));
+        main.append(chat);
+
+        const mobile = window.matchMedia('(max-width: 640px)');
+        const shadow = chat.shadowRoot;
+        const sidebar = shadow.querySelector('.chat-sidebar');
+        const toggle = shadow.querySelector('.toggle-sidebar-button');
+        if (!sidebar || !toggle) return;
+
+        // The pinned Cloudflare component renders its layout inside Shadow DOM.
+        const style = document.createElement('style');
+        style.textContent = `
+          @media (max-width: 640px) {
+            .chat-page-container { position: relative; --mobile-chat-header-height: 56px; }
+            .chat-page-header {
+              box-sizing: border-box;
+              height: var(--mobile-chat-header-height);
+              padding: 6px 12px;
+              gap: 8px;
+            }
+            .chat-page-header-left, .chat-page-header-title { min-width: 0; }
+            .chat-page-header-title span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+            .chat-page-header-actions, .toggle-sidebar-button { flex-shrink: 0; }
+            .chat-sidebar {
+              position: absolute;
+              inset: var(--mobile-chat-header-height) 0 0;
+              z-index: 1;
+              width: auto;
+              min-width: 0;
+              border-right: 0;
+            }
+            .chat-sidebar.collapsed { display: none; }
+            .chat-page-container:has(.chat-sidebar:not(.collapsed)) .chat-page-content { visibility: hidden; }
+            .chat-page-content, .chat-messages { min-height: 0; }
+            .chat-input { min-width: 0; font-size: 16px; }
+          }
+        `;
+        shadow.append(style);
+
+        const historyOpen = () => !sidebar.classList.contains('collapsed');
+        const closeHistory = () => {
+          if (historyOpen()) toggle.click();
+        };
+        let desktopHistoryOpen = historyOpen();
+        toggle.addEventListener('click', () => {
+          toggle.setAttribute('aria-expanded', String(historyOpen()));
+        });
+        toggle.setAttribute('aria-expanded', String(historyOpen()));
+        shadow.addEventListener('click', event => {
+          if (mobile.matches && event.target.closest('.new-chat-button, .chat-list-item') &&
+              !event.target.closest('.chat-list-item-delete')) closeHistory();
+        });
+
+        const viewport = window.visualViewport;
+        const syncViewport = () => {
+          if (mobile.matches && viewport?.scale === 1) {
+            document.body.style.setProperty('--chat-viewport-height', `${viewport.height}px`);
+          } else {
+            document.body.style.removeProperty('--chat-viewport-height');
+          }
+        };
+        mobile.addEventListener('change', () => {
+          if (mobile.matches) {
+            desktopHistoryOpen = historyOpen();
+            closeHistory();
+          } else if (historyOpen() !== desktopHistoryOpen) {
+            toggle.click();
+          }
+          syncViewport();
+        });
+        viewport?.addEventListener('resize', syncViewport);
+        if (mobile.matches) closeHistory();
+        syncViewport();
       });
     })();
   </script>
